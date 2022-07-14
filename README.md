@@ -11,7 +11,7 @@ Upon completing this project I will have
     
 - [ ] Define custom classes to communicate errors from API to client-side application
     
-- [ ]  Handle all data persistence through a database (with Firebase)
+- [ ]  Handle all data persistence through a database (with Parse)
     
 - [ ]  Built multiple responsive React web pages and components facilitating social networking
     
