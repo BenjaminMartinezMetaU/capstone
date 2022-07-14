@@ -41,7 +41,7 @@ API
 
 - [ ]  Express routes user to different web pages fetching and posting dynamic web content with many endpoints
     
-- [ ]  Firebase is set up to store user information
+- [ ]  Parse is set up to store user information
     
 
 Making an account
@@ -50,7 +50,7 @@ Making an account
     
 - [ ]  User submits form to set up their account with a username and other optional profile information including their email, a blurb, and portfolio to display to other users
     
-- [ ]  User information saves in Firebase
+- [ ]  User information saves in Parse
     
 
 Home
@@ -222,18 +222,19 @@ Skeleton ^
 
 API & Database set up for account information
 
-- [ ]  Express is set up with endpoints to route to, post, and display user information
+- [x]  Express is set up with endpoints to route to, post, and display user information
     
-- [ ]  Firebase is set up to store user information
+- [x]  Parse is set up to store user information
     
 
 Making an account
 
-- [ ]  Users can log in with their Facebook account and log out
+- [x]  Users can log in with their Facebook account and 
+- [ ]  Users can log out
     
 - [ ]  User submits form to set up their account with a username and other optional profile information including their email, a blurb, and portfolio to display to other users
     
-- [ ]  User information saves in Firebase
+- [x]  User information saves in Parse
     
 
 Account
