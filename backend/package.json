@@ -4,5 +4,23 @@
     "express": "^4.18.1",
     "morgan": "^1.10.0",
     "parse": "^3.4.3"
-  }
+  },
+  "scripts": {
+    "start": "node server.js"
+  },
+  "name": "backend",
+  "version": "1.0.0",
+  "description": "API for MetaU Capstone on social media platform geared for projects",
+  "main": "app.js",
+  "devDependencies": {},
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/BenjaminMartinezMetaU/capstone.git"
+  },
+  "author": "Benjamin Martinez",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/BenjaminMartinezMetaU/capstone/issues"
+  },
+  "homepage": "https://github.com/BenjaminMartinezMetaU/capstone#readme"
 }
