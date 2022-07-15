@@ -208,14 +208,14 @@ I want to finish MVP by end of week 6, using week 7 as breathing/wiggle room in 
 
 #### Week 4
 
-- [ ]  Create and set up Github repo with basic folder structure and dependencies
+- [x]  Create and set up Github repo with basic folder structure and dependencies
     
-- [ ]  “commit a SUPER BASIC web page that is a skeleton for your project (no major features needed)”
+- [x]  “commit a SUPER BASIC web page that is a skeleton for your project (no major features needed)”
     
 
 Skeleton ^
 
-- [ ]  Displays the following sections: Navigation header bar, sidebar, footer, search bar, card for post, project grid.
+- [x]  Displays the following sections: Navigation header bar, sidebar, footer, search bar, card for post, project grid.
     
 
 #### Week 5
@@ -268,7 +268,7 @@ API & Database set up for project information
 
 - [ ]  Express is set up with endpoints to route to, post, and display wiki projects
     
-- [ ]  Firebase is set up to store wiki information and contribution posts
+- [ ]  Parse is set up to store wiki information and contribution posts
     
 
 #### Week 6
