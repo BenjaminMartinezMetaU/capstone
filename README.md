@@ -232,43 +232,44 @@ Making an account
 - [x]  Users can log in with their Facebook account and 
 - [ ]  Users can log out
     
-- [ ]  User submits form to set up their account with a username and other optional profile information including their email, a blurb, and portfolio to display to other users
+- [x]  User submits form to set up their account with a username and other optional profile information including their email, a blurb, and portfolio to display to other users
     
 - [x]  User information saves in Parse
     
 
 Account
 
-- [ ]  Users can see their account information including username, blurb, portfolio, and email, profile picture, date joined
+- [x]  Users can see their account information including username, blurb, portfolio, and email, profile picture, date joined
     
-- [ ]  Users can see other’s account information
+- [x]  Users can see other’s account information
     
 - [ ]  Users can have different privacy settings to keep information private from other users
     
-- [ ]  Users can edit their account information (except username and date joined)
+- [x]  Users can edit their account information (except username and date joined)
     
 
 Integrate basic Project Wiki software
 
-- [ ]  Displays a wiki page
+- [x]  Displays a wiki page
     
 - [ ]  Users can edit page, with changes displayed publicly
     
 - [ ]  Users can add to page, with additions displayed publicly
     
 
-- [ ]  Users can add text with basic text styling (header, bold, italics etc.)
+- [x]  Users can add text with basic text styling (header, bold, italics etc.)
     
-- [ ]  Users can add files (audio files, or images)
+- [x]  Users can add files (audio files, or images)
     
 - [ ]  When users add, they fill out a description form which is posted publicly to project feeds
     
 
 API & Database set up for project information
 
-- [ ]  Express is set up with endpoints to route to, post, and display wiki projects
+- [x]  Express is set up with endpoints to route to, post, and display wiki projects
     
-- [ ]  Parse is set up to store wiki information and contribution posts
+- [x]  Parse is set up to store wiki information 
+- [ ]  Parse is set up to store contribution posts
     
 
 #### Week 6
@@ -291,7 +292,7 @@ Home
 
 Starting new project
 
-- [ ]  Users can create a new project wiki by submitting information into a form
+- [x]  Users can create a new project wiki by submitting information into a form
     
 - [ ]  Displays information inputted into an empty Wiki page template
     
@@ -302,7 +303,7 @@ Starting new project
 
 Searching
 
-- [ ]  Users can search for projects or profiles
+- [x]  Users can search for projects or profiles
     
 - [ ]  Results are ranked by relevance (using point system)
     
