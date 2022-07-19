@@ -12,6 +12,7 @@ export default function Wiki() {
       <div className='wiki'>
         Wiki
         <ReactQuill theme="snow" value={value} onChange={setValue}/>
+        {console.log("value: ", value)}
 
       
       </div>
