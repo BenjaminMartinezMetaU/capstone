@@ -2,12 +2,21 @@ import * as React from 'react';
 import './Login.css';
 import FacebookLogin from 'react-facebook-login';
 import { Card, Image, Nav } from 'react-bootstrap';
+import axios from 'axios';
+
+import { useNavigate } from "react-router-dom";
+
 
 export default function Login({
   login, setLogin,
   data, setData,
-  picture, setPicture
+  picture, setPicture,
+  
 }) {
+  let navigate = useNavigate();
+
+  const API_BASE_URL = "http://localhost:3001"
+
 
   const responseFacebook = (response) => {
     console.log(response);
@@ -21,14 +30,34 @@ export default function Login({
 
     const signIn = async (response) => {
       try {
+        //use FB id as password into our Parse db
+        //use FB name as username for simplified, immediate login
         let account_info = {
           "username": response.name,
           "password": response.id,
           "userID": response.userID,
           "img_url": response.picture.data.url,
-          "data": response
+          "data": response,
+          "user_name" : null,
+          "blurb" : null
         }
-        const res = await axios.post(`${API_BASE_URL}/sign-in`, account_info)
+        const res = await axios.post(`${API_BASE_URL}/sign-in`, account_info).then(
+          ({data}) => {
+            console.log('data: ', data);
+            setData(data);
+            console.log('data.userExists: ', data.userExists);
+            if(!data.userExists){
+              
+              //go to some page
+              navigate(`/account/`);//${response.userID}`);
+
+            }else{
+              //go to another page
+              navigate(`/account/account-setup`);
+            }
+              
+          }
+        )
 
       } catch (err) {
         alert(err)
@@ -60,7 +89,7 @@ export default function Login({
         </Card.Header>
         {login &&
           <Card.Body>
-            <Card.Title>{data.name}</Card.Title>
+            <Card.Title>{data.username}</Card.Title>
             <Card.Text>
               {data.email}
             </Card.Text>
