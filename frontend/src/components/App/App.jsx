@@ -13,6 +13,7 @@ import Wiki from '../Wiki/Wiki';
 import Account from '../Account/Account';
 import AccountSetup from '../Account/AccountSetup';
 import WikiSetup from '../Wiki/WikiSetup';
+import SearchResults from '../SearchResults/SearchResults'
 
 
 export default function App() {
@@ -30,13 +31,16 @@ export default function App() {
   // Picture link (not rly used)
   const [picture, setPicture] = useState('');
 
+  // Array of either User or Wiki objects set by Searchbar in Navbar
+  const [searchResults, setSearchResults] = useState([]);
+
 
   return (
 
     <div className="app">
     <BrowserRouter>
       
-    <Navbar data={data}/>
+    <Navbar data={data} setSearchResults={setSearchResults}/>
     <Routes>
       <Route path="/" element={
         <Login 
@@ -47,7 +51,7 @@ export default function App() {
       }
       />
 
-      <Route path="/wiki/" element={
+      <Route path="/wiki/:wikiID" element={
           <Wiki />
         }
       />
@@ -65,6 +69,11 @@ export default function App() {
 
       <Route path="/account/account-setup/" element = {
         <AccountSetup data={data} setData={setData}/>
+      } 
+      />
+      
+      <Route path="/search-results/" element = {
+        <SearchResults searchResults={searchResults}/>
       } 
       />
     </Routes>

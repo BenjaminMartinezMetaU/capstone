@@ -22,7 +22,9 @@ export default function WikiSetup({data, setData}) {
                 })
             
             let wikiID = res.data.wiki.objectId;
+            console.log('wikiID: ', wikiID);
             console.log('res.data: ', res.data);
+            
             //go to profile page according to userID
             navigate(`/wiki/${wikiID}`);
         } catch (err) {

@@ -73,7 +73,7 @@ router.post('/register', async (req, res) => {
         currentUser.set("user_name", user_name);
         currentUser.set("blurb", blurb);
 
-        currentUser.save()
+        await currentUser.save()
         res.status(201).json({ currentUser });
         console.log("✅ Successfully added username, blurb")
     } catch (error) {
