@@ -282,6 +282,12 @@ Project Feed (Not on wireframe - [ ]similar to Home page but see posts for a spe
 
 Account
 - [x]  Contribution posts are displayed on profile page
+- [x]  Users have point system stored
+- [ ]  Points are displayed on profile page
+
+Wiki
+- [x]  Wiki has point system stored
+- [ ]  Users can upvote wikis (only once)
     
 
 Home
