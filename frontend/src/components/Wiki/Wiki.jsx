@@ -7,6 +7,9 @@ import { Button } from 'react-bootstrap';
 import { useParams } from 'react-router-dom';
 import axios from 'axios';
 
+import {Tab} from 'react-bootstrap'
+import {Tabs} from 'react-bootstrap'
+
 export default function Wiki() {
 
   const { wikiID } = useParams();
@@ -16,6 +19,11 @@ export default function Wiki() {
   const [wikiData, setWikiData] = useState({});
   const [isLoading, setIsLoading] = useState(false);
 
+  // for switching tabs
+  const [key, setKey] = useState('read-wiki');
+
+
+  // Save button for editing
   const handleSaveWiki = event => {
     event.preventDefault();
     setIsLoading(true)
@@ -35,7 +43,7 @@ export default function Wiki() {
     setIsLoading(false)
   }
 
-
+  // Get wiki info on load
   useEffect(() => {
     async function fetchWikiData() {
       setIsLoading(true);
@@ -59,15 +67,35 @@ export default function Wiki() {
 
   return (
     <div className='wiki'>
+
       <div className='title'>{wikiData.wikiObject && wikiData.wikiObject.title}</div>
-      
-      
-      <ReactQuill theme="snow" value={htmlValue} onChange={setHtmlValue} />
+
+      <Tabs
+      id="wiki-read-edit-tabs"
+      activeKey={key}
+      onSelect={(k) => setKey(k)}
+      className="mb-3"
+      >
+        <Tab eventKey="read-wiki" title="Read Wiki">
+        <div dangerouslySetInnerHTML={{ __html: htmlValue }} />
+
+        </Tab>
+        <Tab eventKey="edit-wiki" title="Edit Wiki">
+          <ReactQuill theme="snow" value={htmlValue} onChange={setHtmlValue} />
 
 
-      <Button onClick={handleSaveWiki}>
-        {isLoading ? 'Saving…' : 'Click to save changes'}
-      </Button>
+          <Button onClick={handleSaveWiki}>
+            {isLoading ? 'Saving…' : 'Click to save changes'}
+          </Button>
+        </Tab>
+
+      </Tabs>
+
+
+
+
+
+
 
 
     </div>
