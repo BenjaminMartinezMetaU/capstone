@@ -252,9 +252,9 @@ Integrate basic Project Wiki software
 
 - [x]  Displays a wiki page
     
-- [ ]  Users can edit page, with changes displayed publicly
+- [x]  Users can edit page, with changes displayed publicly
     
-- [ ]  Users can add to page, with additions displayed publicly
+- [x]  Users can add to page, with additions displayed publicly
     
 
 - [x]  Users can add text with basic text styling (header, bold, italics etc.)
@@ -269,14 +269,19 @@ API & Database set up for project information
 - [x]  Express is set up with endpoints to route to, post, and display wiki projects
     
 - [x]  Parse is set up to store wiki information 
-- [ ]  Parse is set up to store contribution posts
+- [x]  Parse is set up to store contribution posts
     
 
 #### Week 6
 
 Project Feed (Not on wireframe - [ ]similar to Home page but see posts for a specific wiki)
 
-- [ ]  User can switch to project feed tab on each wiki page to view recent updates (contribution posts)
+- [x]  User can switch to project feed tab on each wiki page to view recent updates (contribution posts)
+- [x]  These posts link to user
+- [x]  These posts link to wiki
+
+Account
+- [x]  Contribution posts are displayed on profile page
     
 
 Home
@@ -288,15 +293,16 @@ Home
 - [ ]  Users can comment or vote on these posts
     
 - [ ]  Users can view what others have commented or voted
+
     
 
 Starting new project
 
 - [x]  Users can create a new project wiki by submitting information into a form
     
-- [ ]  Displays information inputted into an empty Wiki page template
+- [x]  Displays information inputted into an empty Wiki page template
     
-- [ ]  Wiki page information is saved in database
+- [x]  Wiki page information is saved in database
     
 - [ ]  New project is linked in account profile
     
