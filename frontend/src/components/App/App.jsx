@@ -20,7 +20,8 @@ export default function App() {
 
   const API_BASE_URL = "http://localhost:3001"
 
-  // Check if a user is logged in (not rly used)
+  // Check if a user is logged in 
+  // TODO: User cannot use site unless logged in
   const [login, setLogin] = useState(false);
 
   // All data of current user at time of login and profile changes 
