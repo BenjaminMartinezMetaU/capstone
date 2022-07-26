@@ -22,6 +22,14 @@ export default function Wiki() {
   // for switching tabs
   const [key, setKey] = useState('read-wiki');
 
+  // for showing to user that edit was successfully saved
+  // Also this only works for first time when current tab
+  // bc goes back to false on tab switch or if failed
+  // but tells user nothing if failed
+  // TODO: prob better way to do this
+  const [isSaved, setIsSaved] = useState(false);
+
+
 
   // Save button for editing
   const handleSaveWiki = event => {
@@ -35,12 +43,17 @@ export default function Wiki() {
           htmlValue
         })
       } catch (err) {
+        setIsSaved(false);
         alert(err)
         console.log(err)
       }
     }
-    saveWiki()
-    setIsLoading(false)
+    saveWiki().then(()=> {
+      setIsLoading(false);
+      setIsSaved(true);
+      console.log('saved: ', saved);
+    })
+    
   }
 
   // Get wiki info on load
@@ -73,7 +86,10 @@ export default function Wiki() {
       <Tabs
       id="wiki-read-edit-tabs"
       activeKey={key}
-      onSelect={(k) => setKey(k)}
+      onSelect={(k) => {
+        setKey(k)
+        setIsSaved(false)
+      }}
       className="mb-3"
       >
         <Tab eventKey="read-wiki" title="Read Wiki">
@@ -87,6 +103,7 @@ export default function Wiki() {
           <Button onClick={handleSaveWiki}>
             {isLoading ? 'Saving…' : 'Click to save changes'}
           </Button>
+          {isSaved && "Saved!"}
         </Tab>
 
       </Tabs>
