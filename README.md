@@ -261,7 +261,7 @@ Integrate basic Project Wiki software
     
 - [x]  Users can add files (audio files, or images)
     
-- [ ]  When users add, they fill out a description form which is posted publicly to project feeds
+- [x]  When users add, they fill out a description form which is posted publicly to project feeds
     
 
 API & Database set up for project information
@@ -310,7 +310,7 @@ Starting new project
     
 - [x]  Wiki page information is saved in database
     
-- [ ]  New project is linked in account profile
+- [x]  New project is linked in account profile
     
 
 Searching
