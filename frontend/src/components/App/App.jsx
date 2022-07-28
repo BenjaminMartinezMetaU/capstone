@@ -14,6 +14,7 @@ import Account from '../Account/Account';
 import AccountSetup from '../Account/AccountSetup';
 import WikiSetup from '../Wiki/WikiSetup';
 import SearchResults from '../SearchResults/SearchResults'
+import Home from '../Home/Home';
 
 
 export default function App() {
@@ -21,7 +22,7 @@ export default function App() {
   const API_BASE_URL = "http://localhost:3001"
 
   // Check if a user is logged in 
-  // TODO: User cannot use site unless logged in
+  // TODO: User cannot use site unless logged in and has set up account
   const [login, setLogin] = useState(false);
 
   // All data of current user at time of login and profile changes 
@@ -29,6 +30,7 @@ export default function App() {
   // and on profile page to check if user profile is the current user
   // ex. blurb, created at, img_url, objectId, userID, user_name, username
   const [data, setData] = useState({});
+  
   // Picture link (not rly used)
   const [picture, setPicture] = useState('');
 
@@ -53,7 +55,7 @@ export default function App() {
       />
 
       <Route path="/wiki/:wikiID" element={
-          <Wiki />
+          <Wiki userData={data}/>
         }
       />
       
@@ -75,6 +77,11 @@ export default function App() {
       
       <Route path="/search-results/" element = {
         <SearchResults searchResults={searchResults}/>
+      } 
+      />
+
+      <Route path="/home/" element = {
+        <Home data={data}/>
       } 
       />
     </Routes>
