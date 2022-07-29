@@ -3,19 +3,22 @@ import './Wiki.css';
 import { useState, useEffect } from "react";
 import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
-import { Button } from 'react-bootstrap';
-import { useParams } from 'react-router-dom';
+import { Button, Card } from 'react-bootstrap';
+import { Link, useParams } from 'react-router-dom';
 import axios from 'axios';
 
 import {Tab} from 'react-bootstrap'
 import {Tabs} from 'react-bootstrap'
 
-export default function Wiki() {
+export default function Wiki({userData}) {
+  console.log('userData: ', userData);
 
   const { wikiID } = useParams();
   const API_BASE_URL = "http://localhost:3001/wiki";
 
   const [htmlValue, setHtmlValue] = useState('');
+  // wiki data has all info. objectId, updatedAt, 
+  //   wikiObject: activity_log, title, desc, html
   const [wikiData, setWikiData] = useState({});
   const [isLoading, setIsLoading] = useState(false);
 
@@ -30,18 +33,24 @@ export default function Wiki() {
   const [isSaved, setIsSaved] = useState(false);
 
 
-
+  
   // Save button for editing
   const handleSaveWiki = event => {
     event.preventDefault();
     setIsLoading(true)
 
     const saveWiki = async () => {
+      const wikiTitle = wikiData.wikiObject.title;
       try {
         const res = await axios.post(`${API_BASE_URL}/save/`, {
           wikiID,
-          htmlValue
+          htmlValue,
+          userData,
+          wikiTitle
         })
+        // Sync frontend to backend (mostly for changelog changes)
+        setWikiData(res.data.wikiInfo)
+        console.log("new wiki info: ", res.data);
       } catch (err) {
         setIsSaved(false);
         alert(err)
@@ -51,7 +60,6 @@ export default function Wiki() {
     saveWiki().then(()=> {
       setIsLoading(false);
       setIsSaved(true);
-      console.log('saved: ', saved);
     })
     
   }
@@ -65,7 +73,7 @@ export default function Wiki() {
       await axios(API_BASE_URL + '/' + wikiID).then(({ data }) => {
         console.log('data: ', data);
         setWikiData(data.wikiInfo);
-        setHtmlValue(data.wikiInfo.wikiObject.html);
+        setHtmlValue(data.wikiInfo.wikiObject.html_curr);
 
       })
         .catch((error) => {
@@ -82,6 +90,27 @@ export default function Wiki() {
     <div className='wiki'>
 
       <div className='title'>{wikiData.wikiObject && wikiData.wikiObject.title}</div>
+      <div className='desc'>{wikiData.wikiObject && wikiData.wikiObject.description}</div>
+      <Card>
+
+        {!isLoading &&
+          <Card.Body>
+            <Card.Title>
+              Project genres:
+              </Card.Title>
+              <Card.Text>
+              {!isLoading && wikiData.wikiObject &&
+                
+                Object.keys(wikiData.wikiObject?.genres).map(function(key, index) {
+                  
+                    return wikiData.wikiObject.genres[key] ? key + ", " : null;
+                  })
+              }
+              </Card.Text>
+            
+          </Card.Body>
+        }
+      </Card>
 
       <Tabs
       id="wiki-read-edit-tabs"
@@ -105,6 +134,27 @@ export default function Wiki() {
           </Button>
           {isSaved && "Saved!"}
         </Tab>
+
+        <Tab eventKey="change-log" title="Project Feed">
+          
+          {wikiData.wikiObject &&
+            wikiData.wikiObject.activity_log.map((change) => {
+              
+              return(
+              <Card>
+            <Card.Body>
+              <Link to={"/account/" + change.userID}>
+                  User: {change.user_name}
+              </Link>
+              {change.change}
+            </Card.Body>
+          </Card>
+              )
+            })
+          }
+          
+
+        </Tab> 
 
       </Tabs>
 
