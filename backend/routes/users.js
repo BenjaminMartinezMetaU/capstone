@@ -62,7 +62,7 @@ router.post('/sign-in', async (req, res) => {
 // User inputs and saves their username, blurb
 router.post('/register', async (req, res) => {
 
-    const { user_name, blurb } = req.body;
+    const { user_name, blurb, favGenres } = req.body;
 
 
     try {
@@ -72,6 +72,7 @@ router.post('/register', async (req, res) => {
         // update fields
         currentUser.set("user_name", user_name);
         currentUser.set("blurb", blurb);
+        currentUser.set("favGenres", favGenres);
 
         await currentUser.save()
         res.status(201).json({ currentUser });

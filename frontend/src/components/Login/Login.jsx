@@ -19,7 +19,7 @@ export default function Login({
 
 
   const responseFacebook = (response) => {
-    console.log(response);
+    console.log("fb: resp: ", response);
     setData(response);
     setPicture(response.picture.data.url);
     if (response.accessToken) {
@@ -39,20 +39,24 @@ export default function Login({
           "img_url": response.picture.data.url,
           "data": response,
           "user_name" : null,
-          "blurb" : null
+          "blurb" : null,
+          "activity_log" : [],
+          "wikis_worked_on" : [],
+          "favGenres" : {}
         }
         const res = await axios.post(`${API_BASE_URL}/sign-in`, account_info).then(
           ({data}) => {
-            console.log('data: ', data);
-            setData(data);
+            // 
+            console.log('data from db: ', data);
+            setData(data.user);
             console.log('data.userExists: ', data.userExists);
-            if(!data.userExists){
+            if(data.userExists && data.user.user_name != null){
               
-              //go to some page
-              navigate(`/account/`);//${response.userID}`);
+              //go to account page
+              navigate(`/account/${data.user.userID}`);
 
             }else{
-              //go to another page
+              //go to account set up page
               navigate(`/account/account-setup`);
             }
               
@@ -71,7 +75,8 @@ export default function Login({
 
   return (
     <nav className="login">
-      Hi
+    {!login &&
+      "Login through Facebook here:" }
       <Card style={{ width: '600px' }}>
         <Card.Header>
           {!login &&
@@ -90,9 +95,7 @@ export default function Login({
         {login &&
           <Card.Body>
             <Card.Title>{data.username}</Card.Title>
-            <Card.Text>
-              {data.email}
-            </Card.Text>
+
           </Card.Body>
         }
       </Card>
