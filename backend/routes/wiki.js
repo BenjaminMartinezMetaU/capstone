@@ -8,7 +8,6 @@ const router = express.Router();
 const { BadRequestError, NotFoundError } = require('../utils/errors');
 
 // Store wiki object, generating id and saving default html
-// TODO: Connect this to user
 router.post('/wiki/new', async (req, res, next) => {
 
     try {
@@ -20,7 +19,8 @@ router.post('/wiki/new', async (req, res, next) => {
             ...req.body,
             "html_curr": "<h1>" + req.body.title + "</h1>" + WIKI_DEFAULT_HTML,
             "html_prev": "<h1>" + req.body.title + "</h1>" + WIKI_DEFAULT_HTML,
-            "activity_log": []
+            "activity_log": [],
+            "points" : 0,
         }
         const wiki = new Parse.Object("Wiki", { wikiObject })
         await wiki.save();
@@ -113,7 +113,8 @@ router.post('/wiki/save', async (req, res, next) => {
             "userID": userData.userID,
             "user_name" : userData.user_name,
             "wikiID" : wikiID,
-            "wikiTitle" : wikiTitle
+            "wikiTitle" : wikiTitle,
+            "points" : 0
         }
 
         // USER updates

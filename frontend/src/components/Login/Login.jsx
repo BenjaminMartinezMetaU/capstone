@@ -42,7 +42,9 @@ export default function Login({
           "blurb" : null,
           "activity_log" : [],
           "wikis_worked_on" : [],
-          "favGenres" : {}
+          "favGenres" : {},
+          "wikis_upvoted" : [],
+          "points" : 0
         }
         const res = await axios.post(`${API_BASE_URL}/sign-in`, account_info).then(
           ({data}) => {

@@ -10,8 +10,10 @@ import axios from 'axios';
 import {Tab} from 'react-bootstrap'
 import {Tabs} from 'react-bootstrap'
 
-export default function Wiki({userData}) {
+export default function Wiki({userData, setUserData}) {
   console.log('userData: ', userData);
+  // We get user data to see if they have upvoted this before
+  // We set user data to change that they have upvoted this
 
   const { wikiID } = useParams();
   const API_BASE_URL = "http://localhost:3001/wiki";
@@ -65,7 +67,9 @@ export default function Wiki({userData}) {
   }
 
   // Get wiki info on load
+  // Get user info on load for hasUpvoted
   useEffect(() => {
+    // Wiki fetch
     async function fetchWikiData() {
       setIsLoading(true);
 
@@ -83,14 +87,72 @@ export default function Wiki({userData}) {
         });
       setIsLoading(false);
     }
+    // User fetch
+    async function fetchUserData() {
+      setIsLoading(true);
+
+
+      await axios(API_BASE_URL + '/' + userData.userID).then(({ data }) => {
+
+        console.log('data: ', data);
+        //setUserData(data.userInfo);
+
+      })
+        .catch((error) => {
+          alert(error);
+          console.log('error: ', error);
+
+        });
+      setIsLoading(false);
+    }
     fetchWikiData();
+    fetchUserData();
   }, []);
+
+  const hasUpvoted = userData.wikis_upvoted?.filter(w => w.wikiID === wikiID).length > 0
+  
+
+  // Post new user data to save wiki to wikis_upvoted
+  const handleUpvote = event => {
+    event.preventDefault();
+    console.log("Loading upvote save...");
+    const saveUpvote = async () => {
+      try {
+        const wikiTitle = wikiData.wikiObject.title;
+        const res = await axios.post(`${API_BASE_URL}/upvote/`, {
+          wikiID,
+          wikiTitle
+        })
+        // Sync frontend to backend (to reflect upvote change)
+        setUserData(res.data.currentUser)
+        setWikiData(res.data.wikiInfo);
+        console.log("new info: ", res.data);
+      } catch (err) {
+        alert(err)
+        console.log(err)
+      }
+    }
+    saveUpvote().then(()=> {
+      console.log("Finished saving upvote!");
+      console.log("New and upvtoed user data: ", userData);
+    }).catch(() => {
+      console.log("Failed to save upvote");
+    })
+    
+  }
+                     
 
   return (
     <div className='wiki'>
 
       <div className='title'>{wikiData.wikiObject && wikiData.wikiObject.title}</div>
       <div className='desc'>{wikiData.wikiObject && wikiData.wikiObject.description}</div>
+      <div className='points'>Points: {wikiData.wikiObject && wikiData.wikiObject.points}
+      <Button type='button' className='upvote' onClick={handleUpvote} disabled={hasUpvoted}>
+        {hasUpvoted ? "You've already upvoted this project" : "+1"}
+      </Button>
+      </div>
+
       <Card>
 
         {!isLoading &&

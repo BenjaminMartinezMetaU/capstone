@@ -16,6 +16,7 @@ export default function Account({ data, picture }) {
   console.log('data: ac', data);
 
 
+  //Get user info on load
   useEffect(() => {
     async function fetchUserData() {
       updateIsLoading(true);

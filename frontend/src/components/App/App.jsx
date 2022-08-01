@@ -55,7 +55,7 @@ export default function App() {
       />
 
       <Route path="/wiki/:wikiID" element={
-          <Wiki userData={data}/>
+          <Wiki userData={data} setUserData={setData}/>
         }
       />
       
