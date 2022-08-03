@@ -1,8 +1,9 @@
 .navbar{
-    background-color: aquamarine;
+    background-color: #ffdfbf;
     display: flex;
     justify-content: start;
     padding: 1px;
+    font-size: larger;
 }
 
 .logo{
