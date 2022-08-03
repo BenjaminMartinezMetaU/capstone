@@ -1,9 +1,9 @@
 import * as React from 'react';
 import './Home.css';
+import ProjectPost from './ProjectPost';
 import { useState, useEffect } from 'react';
 import axios from 'axios';
-import { Card } from 'react-bootstrap';
-import { Link } from 'react-router-dom';
+
 
 // Home just shows change feeds from projects that user has worked on
 // In backend: 
@@ -13,7 +13,8 @@ import { Link } from 'react-router-dom';
 //  4. render card for each element in that res object
 export default function Home({data}) {
   const [isLoading, updateIsLoading] = useState(false);
-  const [homeFeedData, setHomeFeedData] = useState([])
+  const [homeFeedData, setHomeFeedData] = useState([]);
+  const [wikisRanked, setWikisRanked] = useState([]);
   console.log('homeFeedData: ', homeFeedData);
   const API_BASE_URL = "http://localhost:3001"
 
@@ -27,7 +28,11 @@ useEffect(() => {
     await axios(API_BASE_URL + '/home').then(({ data }) => {
       
       console.log('data: ', data);
-      setHomeFeedData(data.wikiFeeds);
+      const wikisRankedSorted = data.wikisWithWeights;
+      wikisRankedSorted.sort((a,b) => b.weight - a.weight)
+      setWikisRanked(wikisRankedSorted);
+
+      setHomeFeedData(data.wikiFeeds.reverse());
 
     })
       .catch((error) => {
@@ -43,24 +48,15 @@ useEffect(() => {
   return (
     <div className='home'>
 
-    {!isLoading &&
-      homeFeedData.map((activityList) => {
+     {!isLoading &&
+      wikisRanked.map((wikiRanked) => {
+        let activityLog = wikiRanked.wiki.wikiObject.activity_log;
+        
         return(
-        activityList.map((change) => {
+          
+        activityLog.reverse().map((change) => {
           return(
-            <Card>
-              <Card.Body>
-              <Link to={"/account/" + change.userID}>
-                  {change.user_name}
-              </Link>
-                  made a change to 
-                <Link to={"/wiki/" + change.wikiID}>
-                  Wiki: {change.wikiTitle}
-                </Link>
-                project. 
-                Change: {change.change}
-              </Card.Body>
-            </Card>
+            <ProjectPost change={change} displayWikiInfo={true} displayUserInfo={true}/>
             )
         }) 
         )

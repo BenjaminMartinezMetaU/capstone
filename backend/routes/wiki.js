@@ -1,6 +1,7 @@
 const express = require('express');
 const Parse = require('parse/node');
 const { WIKI_DEFAULT_HTML } = require('./constants.js')
+const diff = require('../utils/htmldiff')
 
 
 const router = express.Router();
@@ -92,14 +93,23 @@ router.post('/wiki/save', async (req, res, next) => {
         const wikiInfo = await queryWiki.first();
 
 
-        // check what was edited
-        //    for now keeping it very simple with
-        //    just information showing if wiki was lengthened or not
-        //    TODO: Get more specific with quill deltas
+        // check what was edited by looking at diff
+        // 3 options modified, added to, deleted from
+
         const oldWikiObject = wikiInfo.attributes.wikiObject;
-        const change = oldWikiObject.html_curr.length < htmlValue.length ?
-            "added to project" : "did not add to project";
-        console.log('userData: ', userData);
+
+        // Diff HTML strings
+        
+        const htmlDiff = diff(oldWikiObject.html_curr, htmlValue);
+        console.log('htmlDiff: ', htmlDiff);
+        // Find change
+        let change = "modified project";
+        if(htmlDiff.includes("ins") && !htmlDiff.includes("del")){
+            change = "added to project"
+        } else if (htmlDiff.includes("del") && !htmlDiff.includes("ins")){
+            change = "deleted from project"
+        } 
+        
 
 
 
@@ -114,7 +124,8 @@ router.post('/wiki/save', async (req, res, next) => {
             "user_name" : userData.user_name,
             "wikiID" : wikiID,
             "wikiTitle" : wikiTitle,
-            "points" : 0
+            "points" : 0,
+            "htmlDiff" : htmlDiff
         }
 
         // USER updates
@@ -196,15 +207,62 @@ router.get('/home', async (req, res, next) => {
         // 1. get curr user's wikis_worked on 
         let currentUser = Parse.User.current();
         console.log('currentUser: ', currentUser);
-        let wikiIDs_to_fetch = [];
+        let wikiIDs = [];
         currentUser.attributes.wikis_worked_on.map((wiki)=>{
-            wikiIDs_to_fetch.push(wiki.wikiID);
+            wikiIDs.push(wiki.wikiID);
         });
+        const wikiIDsUpvoted = [];
+        currentUser.attributes.wikis_upvoted.map((wiki)=>{
+            wikiIDsUpvoted.push(wiki.wikiID);
+        });
+        const favGenres = currentUser.attributes.favGenres;
 
+        // 2. get wikiInfo from wikisWorkedOn
+        const wikisWorkedOnObjects = await Promise.all(wikiIDs.map(async wikiID => {
+            const queryWiki = new Parse.Query("Wiki");
+            queryWiki.equalTo("objectId", wikiID);
+            const wikiInfo = await queryWiki.first();
+            console.log('wikiInfo: att', wikiInfo.attributes);
+            return wikiInfo.attributes.wikiObject;
+          }));
+
+        // 3. get wikiInfo from ALL wikis where at least one genre matches user favGenres
+        // prob not efficient
+        const queryWiki = new Parse.Query("Wiki");
+        const results = await queryWiki.find();
+        const wikisWithWeights = results.map((wiki) => {
+            const wikiGenres = wiki.attributes.wikiObject.genres;
+            let weight = 0;
+            // Loop through genres
+            Object.keys(favGenres).forEach(function(key) {
+                if(favGenres[key] && wikiGenres[key]){
+                    // 1 matching genre = 1 more weight
+                    weight += 1;
+                }
+            });
+            // Check if we've worked on the wiki to give it more weight
+            const hasWorkedOn = wikiIDs.some((wikiID) => wikiID === wiki.id);
+            weight = hasWorkedOn ? weight + 4 : weight;
+            // Check if upvoted wiki to give it more weight
+            const hasUpvoted = wikiIDsUpvoted.some((wikiID) => wikiID === wiki.id);
+            weight = hasUpvoted ? weight + 3 : weight;
+
+            if(weight > 0){
+                
+                return {wiki, weight};
+            } else{
+                return null;
+            }
+            
+        });
+        
+
+ 
+        
         //  2. for each wiki find and get the wiki info
         //  3. store it 
 
-        const wikiFeeds = await Promise.all(wikiIDs_to_fetch.map(async wikiID => {
+        const wikiFeeds = await Promise.all(wikiIDs.map(async wikiID => {
             const queryWiki = new Parse.Query("Wiki");
             queryWiki.equalTo("objectId", wikiID);
             const wikiInfo = await queryWiki.first();
@@ -212,7 +270,7 @@ router.get('/home', async (req, res, next) => {
             return wikiInfo.attributes.wikiObject.activity_log;
           }));
     
-        res.status(200).json({ wikiFeeds });
+        res.status(200).json({ wikiFeeds, wikisWithWeights });
         console.log("✅ Successfully retrieved wiki info!")
 
     } catch (error) {
