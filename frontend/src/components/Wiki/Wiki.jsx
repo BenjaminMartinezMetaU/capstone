@@ -10,6 +10,8 @@ import axios from 'axios';
 import {Tab} from 'react-bootstrap'
 import {Tabs} from 'react-bootstrap'
 
+import ProjectPost from '../Home/ProjectPost';
+
 export default function Wiki({userData, setUserData}) {
   console.log('userData: ', userData);
   // We get user data to see if they have upvoted this before
@@ -149,7 +151,7 @@ export default function Wiki({userData, setUserData}) {
       <div className='desc'>{wikiData.wikiObject && wikiData.wikiObject.description}</div>
       <div className='points'>Points: {wikiData.wikiObject && wikiData.wikiObject.points}
       <Button type='button' className='upvote' onClick={handleUpvote} disabled={hasUpvoted}>
-        {hasUpvoted ? "You've already upvoted this project" : "+1"}
+        {hasUpvoted ? "Upvoted" : "+1"}
       </Button>
       </div>
 
@@ -203,14 +205,8 @@ export default function Wiki({userData, setUserData}) {
             wikiData.wikiObject.activity_log.map((change) => {
               
               return(
-              <Card>
-            <Card.Body>
-              <Link to={"/account/" + change.userID}>
-                  User: {change.user_name}
-              </Link>
-              {change.change}
-            </Card.Body>
-          </Card>
+                <ProjectPost change={change} displayWikiInfo={false} displayUserInfo={true}/>
+
               )
             })
           }
