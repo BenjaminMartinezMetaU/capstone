@@ -7,6 +7,7 @@ export default function AccountSetup({ data, setData }) {
 
   const user_name = React.createRef();
   const blurb = React.createRef();
+  const email = React.createRef();
   const [favGenres, setFavGenres] = React.useState({
     "Video games": false,
     "Apps": false,
@@ -28,6 +29,7 @@ export default function AccountSetup({ data, setData }) {
         const res = await axios.post(`${API_BASE_URL}/register`, {
           "user_name": user_name.current.value,
           "blurb": blurb.current.value,
+          "email" : email.current.value,
           "favGenres" : favGenres
         })
         console.log("User upd: ", res.data.currentUser)
@@ -64,6 +66,12 @@ export default function AccountSetup({ data, setData }) {
             {data.blurb ? data.blurb : ""}
 
           </textarea>
+        </label>
+        <label>
+          <span>Email: </span>
+          <input ref={email} defaultValue={data.email}>
+
+          </input>
         </label>
 
         <div className='favorite-categories'>

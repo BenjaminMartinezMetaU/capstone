@@ -40,6 +40,7 @@ export default function Login({
           "data": response,
           "user_name" : null,
           "blurb" : null,
+          "email" : null,
           "activity_log" : [],
           "wikis_worked_on" : [],
           "favGenres" : {},
@@ -76,10 +77,15 @@ export default function Login({
   }
 
   return (
-    <nav className="login">
-    {!login &&
-      "Login through Facebook here:" }
-      <Card style={{ width: '600px' }}>
+    <div className="login">
+    {login && "You're already logged in."}
+
+      <Card style={{ width: '600px' }} className="text-center">
+      {!login &&
+          <Card.Title>
+            Log in through Facebook here:
+          </Card.Title>
+        }
         <Card.Header>
           {!login &&
             <FacebookLogin
@@ -90,18 +96,10 @@ export default function Login({
               callback={responseFacebook}
               icon="fa-facebook" />
           }
-          {login &&
-            <Image src={picture} roundedCircle />
-          }
         </Card.Header>
-        {login &&
-          <Card.Body>
-            <Card.Title>{data.username}</Card.Title>
 
-          </Card.Body>
-        }
       </Card>
-    </nav>
+    </div>
 
   );
 }

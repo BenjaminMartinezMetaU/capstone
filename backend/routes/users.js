@@ -62,7 +62,7 @@ router.post('/sign-in', async (req, res) => {
 // User inputs and saves their username, blurb
 router.post('/register', async (req, res) => {
 
-    const { user_name, blurb, favGenres } = req.body;
+    const { user_name, blurb, email, favGenres } = req.body;
 
 
     try {
@@ -72,11 +72,13 @@ router.post('/register', async (req, res) => {
         // update fields
         currentUser.set("user_name", user_name);
         currentUser.set("blurb", blurb);
+        currentUser.set("email", email);
         currentUser.set("favGenres", favGenres);
+
 
         await currentUser.save()
         res.status(201).json({ currentUser });
-        console.log("✅ Successfully added username, blurb, genres")
+        console.log("✅ Successfully added username, blurb, email, genres")
     } catch (error) {
         res.status(400)
         res.send({ "❌ error": "Failed to add fields to user: " + error })
@@ -118,8 +120,7 @@ router.post('/wiki/upvote', async (req, res) => {
         await wikiInfo.save();
 
         res.status(201).json({ currentUser, wikiInfo });
-        console.log('currentUsernew: ', currentUser);
-        console.log("✅ Successfully added username, blurb, genres")
+        console.log("✅ Successfully added upvote to user and wiki")
     } catch (error) {
         res.status(400)
         res.send({ "❌ error": "Failed to upvote to user and wiki " + error })

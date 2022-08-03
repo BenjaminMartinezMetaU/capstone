@@ -4,6 +4,7 @@ import { useParams, Link } from 'react-router-dom';
 import { useState, useEffect } from 'react';
 import axios from 'axios';
 import { Card, Image, Button } from 'react-bootstrap';
+import ProjectPost from '../Home/ProjectPost';
 
 export default function Account({ data, picture }) {
   const [isLoading, updateIsLoading] = useState(false);
@@ -60,6 +61,7 @@ export default function Account({ data, picture }) {
         }
       </Card>
 
+      {/* Blurb Card */ }
       <Card>
         {!isLoading &&
           <Card.Body>
@@ -69,6 +71,18 @@ export default function Account({ data, picture }) {
             </Card.Text>
           </Card.Body>}
       </Card>
+      {/* Email Card */ }
+      <Card>
+        {!isLoading &&
+          <Card.Body>
+            <Card.Title>Email</Card.Title>
+            <Card.Text>
+              {accountData?.email}
+            </Card.Text>
+          </Card.Body>}
+      </Card>
+
+      {/* Genres Card */ }
       <Card>
 
         {!isLoading &&
@@ -90,6 +104,7 @@ export default function Account({ data, picture }) {
         }
       </Card>
 
+      {/* Wikis worked on Card */ }
       <Card>
         <Card.Title>Wikis worked on:</Card.Title>
         {!isLoading &&
@@ -109,21 +124,14 @@ export default function Account({ data, picture }) {
         }
       </Card>
 
-
+      {/* Activity log Card */ }
       <Card>
         <Card.Title>Activity:</Card.Title>
         {!isLoading &&
           accountData?.activity_log?.map((change) => {
 
             return (
-              <Card>
-                <Card.Body>
-                  <Link to={"/wiki/" + change.wikiID}>
-                    Wiki: {change.wikiTitle}
-                  </Link>
-                  {change.change}
-                </Card.Body>
-              </Card>
+              <ProjectPost change={change} displayUserInfo={false} displayWikiInfo={true}/>
             )
           })
         }
