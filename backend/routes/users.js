@@ -7,14 +7,14 @@ const { BadRequestError, NotFoundError } = require('../utils/errors');
 // Expects parameters for username, password, and any additional
 // columns that you want in your user table (profile_picture_url, etc)
 router.post('/sign-in', async (req, res) => {
-    let user = new Parse.User(req.body)
+    const user = new Parse.User(req.body)
     // Check if user already exists
     // TODO: make User model class to store common methods like this
 
-    let queryUsersById = new Parse.Query(Parse.User);
+    const queryUsersById = new Parse.Query(Parse.User);
     queryUsersById.equalTo("userID", req.body.userID);
-    let usersWithSameId = await queryUsersById.find();
-    let userExists = usersWithSameId.length > 0;
+    const usersWithSameId = await queryUsersById.find();
+    const userExists = usersWithSameId.length > 0;
 
 
     // login to Parse session

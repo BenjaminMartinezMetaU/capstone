@@ -14,8 +14,8 @@ router.post('/wiki/new', async (req, res, next) => {
         // req.body contains title and html body as string
         // on edit, user will change current html and compares it to previous
         // to see edit diff
-        // TODO: realized there's little point to doing above ^ unless we wanna store a cache of prev pages
-        let wikiObject = {
+        // TODO: store a cache of prev pages
+        const wikiObject = {
             ...req.body,
             "html_curr": "<h1>" + req.body.title + "</h1>" + WIKI_DEFAULT_HTML,
             "html_prev": "<h1>" + req.body.title + "</h1>" + WIKI_DEFAULT_HTML,
@@ -30,7 +30,7 @@ router.post('/wiki/new', async (req, res, next) => {
         // USER updates: connect it to user
         // add new Wiki started to wikis_worked_on
 
-        let currentUser = Parse.User.current();
+        const currentUser = Parse.User.current();
 
         /* User does not contain the current wiki */
         const new_wiki_worked_on = {
@@ -128,7 +128,7 @@ router.post('/wiki/save', async (req, res, next) => {
 
         // USER updates
         // add activity to user info
-        let currentUser = Parse.User.current();
+        const currentUser = Parse.User.current();
 
 
         console.log('currentUser: ', currentUser);
@@ -203,7 +203,7 @@ router.get('/home', async (req, res, next) => {
 
     try {
         // 1. get curr user's wikis_worked on 
-        let currentUser = Parse.User.current();
+        const currentUser = Parse.User.current();
         console.log('currentUser: ', currentUser);
         let wikiIDs = [];
         currentUser.attributes.wikis_worked_on.map((wiki) => {
