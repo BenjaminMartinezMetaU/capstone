@@ -6,7 +6,7 @@ import { useState, useEffect } from 'react';
 import axios from 'axios';
 
 import FacebookLogin from 'react-facebook-login';
-
+import './App.css';
 import Navbar from '../Navbar/Navbar';
 import Login from '../Login/Login';
 import Wiki from '../Wiki/Wiki';
@@ -42,6 +42,9 @@ export default function App() {
 
     <div className="app">
     <BrowserRouter>
+    <main>
+    <div className='containers'>
+    <div className='wrapper'>
       
     <Navbar data={data} setSearchResults={setSearchResults}/>
     <Routes>
@@ -85,7 +88,9 @@ export default function App() {
       } 
       />
     </Routes>
-
+    </div>
+    </div>
+    </main>
     </BrowserRouter>
       
     </div>
