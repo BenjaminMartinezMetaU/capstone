@@ -287,14 +287,14 @@ Account
 
 Wiki
 - [x]  Wiki has point system stored
-- [ ]  Users can upvote wikis (only once)
+- [x]  Users can upvote wikis (only once)
     
 
 Home
 
-- [ ]  On initial page load, display the projects user is interested in (contributed to or has upvoted before) on sidebar
+- [x]  On initial page load, display the projects user is interested in (contributed to or has upvoted before) on sidebar
     
-- [ ]  Display posts from project feeds that user is interested in
+- [x]  Display posts from project feeds that user is interested in
     
 - [ ]  Users can comment or vote on these posts
     
