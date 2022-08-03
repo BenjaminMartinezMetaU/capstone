@@ -4,7 +4,7 @@ import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import { useState } from 'react';
 
-export default function WikiSetup({data, setData}) {
+export default function WikiSetup({ data, setData }) {
 
   const [genres, setGenres] = useState({
     "Video games": false,
@@ -23,70 +23,70 @@ export default function WikiSetup({data, setData}) {
     event.preventDefault();
 
     const registerWiki = async () => {
-        try {
-            const res = await axios.post(`${API_BASE_URL}/wiki/new/`, {
-                "title" : title.current.value,
-                "description" : description.current.value,
-                "genres" : genres
-                })
-            
-            let wikiID = res.data.wiki.objectId;
-            console.log('wikiID: ', wikiID);
-            console.log('res.data: ', res.data);
-            
-            //go to profile page according to userID
-            navigate(`/wiki/${wikiID}`);
-        } catch (err) {
-            alert(err)
-            console.log(err)
-        }
+      try {
+        const res = await axios.post(`${API_BASE_URL}/wiki/new/`, {
+          "title": title.current.value,
+          "description": description.current.value,
+          "genres": genres
+        })
+
+        let wikiID = res.data.wiki.objectId;
+        console.log('wikiID: ', wikiID);
+        console.log('res.data: ', res.data);
+
+        //go to wiki page by new wikiID
+        navigate(`/wiki/${wikiID}`);
+      } catch (err) {
+        alert(err)
+        console.log(err)
+      }
     }
     registerWiki()
-}
+  }
   // Handler for clicking checkboxes
   const handleToggle = ({ target }) =>
     setGenres(s => ({ ...s, [target.name]: !s[target.name] }));
 
 
-    return (
-      <div className='account-setup'>
+  return (
+    <div className='account-setup'>
 
-        <form onSubmit={handleSubmit}>
-            <div className="title">New Wiki Setup</div>
-            <label>
-                <span>Title (required): </span>
-                <input ref={title} required={true}>
+      <form onSubmit={handleSubmit}>
+        <div className="title">New Wiki Setup</div>
+        <label>
+          <span>Title (required): </span>
+          <input ref={title} required={true}>
 
-                </input>
-            </label>
-            <label>
-                <span>Description: </span>
-                <textarea ref = {description} rows = "3" cols = "50" placeholder="Describe the new project..." >
-               
+          </input>
+        </label>
+        <label>
+          <span>Description: </span>
+          <textarea ref={description} rows="3" cols="50" placeholder="Describe the new project..." >
 
-              </textarea>
-            </label>
-            <div className='categories'>
+
+          </textarea>
+        </label>
+        <div className='categories'>
           <span>Select genre of project: </span>
           {Object.keys(genres).map(key => (
-            <div className='category-checkbox'> 
-            <label>
-            <span>{key}: </span>
-            <input
-              type="checkbox"
-              onChange={handleToggle}
-              key={key}
-              name={key}
-              checked={genres[key]}
-            />
-           </label>
-           </div>
+            <div className='category-checkbox'>
+              <label>
+                <span>{key}: </span>
+                <input
+                  type="checkbox"
+                  onChange={handleToggle}
+                  key={key}
+                  name={key}
+                  checked={genres[key]}
+                />
+              </label>
+            </div>
           ))}
         </div>
-            <button type="submit">Generate new project Wiki</button>
-        </form>   
-      
-      </div>
-    );
-  
+        <button type="submit">Generate new project Wiki</button>
+      </form>
+
+    </div>
+  );
+
 }

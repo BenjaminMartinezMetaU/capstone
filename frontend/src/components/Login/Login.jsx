@@ -11,7 +11,7 @@ export default function Login({
   login, setLogin,
   data, setData,
   picture, setPicture,
-  
+
 }) {
   let navigate = useNavigate();
 
@@ -32,37 +32,38 @@ export default function Login({
       try {
         //use FB id as password into our Parse db
         //use FB name as username for simplified, immediate login
+        // Init all user info to be stored
         let account_info = {
           "username": response.name,
           "password": response.id,
           "userID": response.userID,
           "img_url": response.picture.data.url,
           "data": response,
-          "user_name" : null,
-          "blurb" : null,
-          "email" : null,
-          "activity_log" : [],
-          "wikis_worked_on" : [],
-          "favGenres" : {},
-          "wikis_upvoted" : [],
-          "points" : 0
+          "user_name": null,
+          "blurb": null,
+          "email": null,
+          "activity_log": [],
+          "wikis_worked_on": [],
+          "favGenres": {},
+          "wikis_upvoted": [],
+          "points": 0
         }
         const res = await axios.post(`${API_BASE_URL}/sign-in`, account_info).then(
-          ({data}) => {
-            // 
+          ({ data }) => {
+
             console.log('data from db: ', data);
             setData(data.user);
-            console.log('data.userExists: ', data.userExists);
-            if(data.userExists && data.user.user_name != null){
-              
+            // Check if we need to set up account or not
+            if (data.userExists && data.user.user_name != null) {
+
               //go to account page
               navigate(`/account/${data.user.userID}`);
 
-            }else{
+            } else {
               //go to account set up page
               navigate(`/account/account-setup`);
             }
-              
+
           }
         )
 
@@ -78,10 +79,10 @@ export default function Login({
 
   return (
     <div className="login">
-    {login && "You're already logged in."}
+      {login && "You're already logged in."}
 
       <Card style={{ width: '600px' }} className="text-center">
-      {!login &&
+        {!login &&
           <Card.Title>
             Log in through Facebook here:
           </Card.Title>

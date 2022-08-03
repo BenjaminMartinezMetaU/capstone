@@ -14,15 +14,15 @@ export default function Searchbar({ data, setSearchResults }) {
     let navigate = useNavigate();
 
     const handleSubmit = event => {
-  
+
         event.preventDefault();
         setIsLoading(true);
         console.log('isLoading: ', isLoading);
 
         const search = async () => {
-            
+
             try {
-                
+
                 const query_req = { "searchQuery": query.current.value }
                 const res_users = await axios.post(`${API_BASE_URL}/search`, query_req)
                 const res_wikis = await axios.post(`${API_BASE_URL}/wiki/search`, query_req)
@@ -38,7 +38,7 @@ export default function Searchbar({ data, setSearchResults }) {
             navigate(`/search-results/`);
             setIsLoading(false)
         }
-            );
+        );
     }
 
     return (
@@ -47,15 +47,15 @@ export default function Searchbar({ data, setSearchResults }) {
             <form onSubmit={handleSubmit}>
                 <div className="search-label">Search</div>
                 <label>
-                        <input ref={query} placeholder={'Find users or projects here'} style={{width: "300px"}}>
-                        </input>
+                    <input ref={query} placeholder={'Find users or projects here'} style={{ width: "300px" }}>
+                    </input>
 
-                    
+
                 </label>
 
                 <button type="submit">{isLoading ? 'Loading...' : 'Search'}</button>
             </form>
-            
+
         </div>
 
     );

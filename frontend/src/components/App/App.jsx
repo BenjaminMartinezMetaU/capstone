@@ -2,7 +2,7 @@ import * as React from 'react';
 import {
   Routes, Route, Link, useParams, BrowserRouter,
 } from 'react-router-dom';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, createContext } from 'react';
 import axios from 'axios';
 
 import FacebookLogin from 'react-facebook-login';
@@ -22,7 +22,6 @@ export default function App() {
   const API_BASE_URL = "http://localhost:3001"
 
   // Check if a user is logged in 
-  // TODO: User cannot use site unless logged in and has set up account
   const [login, setLogin] = useState(false);
 
   // All data of current user at time of login and profile changes 
@@ -30,7 +29,7 @@ export default function App() {
   // and on profile page to check if user profile is the current user
   // ex. blurb, created at, img_url, objectId, userID, user_name, username
   const [data, setData] = useState({});
-  
+
   // Picture link (not rly used)
   const [picture, setPicture] = useState('');
 
@@ -41,58 +40,64 @@ export default function App() {
   return (
 
     <div className="app">
-    <BrowserRouter>
-    <main>
-    <div className='containers'>
-    <div className='wrapper'>
-      
-    <Navbar data={data} setSearchResults={setSearchResults}/>
-    <Routes>
-      <Route path="/" element={
-        <Login 
-          login={login} setLogin={setLogin}
-          data={data} setData={setData}
-          picture={picture} setPicture={setPicture} 
-        />
-      }
-      />
 
-      <Route path="/wiki/:wikiID" element={
-          <Wiki userData={data} setUserData={setData}/>
-        }
-      />
-      
-      <Route path="/wiki/new" element={
-          <WikiSetup />
-        }
-      />
+      <BrowserRouter>
+        <main>
+          <div className='containers'>
+            <div className='wrapper'>
+
+              <Navbar
+                data={data}
+                setSearchResults={setSearchResults}
+                login={login}
+              />
+              <Routes>
+                <Route path="/" element={
+                  <Login
+                    login={login} setLogin={setLogin}
+                    data={data} setData={setData}
+                    picture={picture} setPicture={setPicture}
+                  />
+                }
+                />
+
+                <Route path="/wiki/:wikiID" element={
+                  <Wiki userData={data} setUserData={setData} />
+                }
+                />
+
+                <Route path="/wiki/new" element={
+                  <WikiSetup />
+                }
+                />
 
 
-      <Route path="/account/:userID" element={
-          <Account data={data} picture={picture}/>
-        }
-      />
+                <Route path="/account/:userID" element={
+                  <Account data={data} picture={picture} />
+                }
+                />
 
-      <Route path="/account/account-setup/" element = {
-        <AccountSetup data={data} setData={setData}/>
-      } 
-      />
-      
-      <Route path="/search-results/" element = {
-        <SearchResults searchResults={searchResults}/>
-      } 
-      />
+                <Route path="/account/account-setup/" element={
+                  <AccountSetup data={data} setData={setData} />
+                }
+                />
 
-      <Route path="/home/" element = {
-        <Home data={data}/>
-      } 
-      />
-    </Routes>
-    </div>
-    </div>
-    </main>
-    </BrowserRouter>
-      
+                <Route path="/search-results/" element={
+                  <SearchResults searchResults={searchResults} />
+                }
+                />
+
+                <Route path="/home/" element={
+                  <Home data={data} />
+                }
+                />
+              </Routes>
+            </div>
+          </div>
+        </main>
+      </BrowserRouter>
+
+
     </div>
 
   );

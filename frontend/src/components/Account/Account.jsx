@@ -41,9 +41,11 @@ export default function Account({ data, picture }) {
 
   return (
     <div className='account'>
+    <div className='profile-header'>
       {isLoading ? "Loading..." :
         accountData?.user_name + "'s profile"
       }
+      </div>
       <Card style={{ width: '600px' }}>
         <Card.Header>
 
@@ -54,9 +56,7 @@ export default function Account({ data, picture }) {
         {!isLoading &&
           <Card.Body>
             <Card.Title>{accountData?.username}</Card.Title>
-            <Card.Text>
-              Name from Facebook
-            </Card.Text>
+
           </Card.Body>
         }
       </Card>

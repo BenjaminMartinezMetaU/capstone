@@ -7,12 +7,12 @@ import { Button, Card } from 'react-bootstrap';
 import { Link, useParams } from 'react-router-dom';
 import axios from 'axios';
 
-import {Tab} from 'react-bootstrap'
-import {Tabs} from 'react-bootstrap'
+import { Tab } from 'react-bootstrap'
+import { Tabs } from 'react-bootstrap'
 
 import ProjectPost from '../Home/ProjectPost';
 
-export default function Wiki({userData, setUserData}) {
+export default function Wiki({ userData, setUserData }) {
   console.log('userData: ', userData);
   // We get user data to see if they have upvoted this before
   // We set user data to change that they have upvoted this
@@ -37,8 +37,8 @@ export default function Wiki({userData, setUserData}) {
   const [isSaved, setIsSaved] = useState(false);
 
 
-  
-  // Save button for editing
+
+  // Save button for editing, post new html and generate project post
   const handleSaveWiki = event => {
     event.preventDefault();
     setIsLoading(true)
@@ -61,11 +61,11 @@ export default function Wiki({userData, setUserData}) {
         console.log(err)
       }
     }
-    saveWiki().then(()=> {
+    saveWiki().then(() => {
       setIsLoading(false);
       setIsSaved(true);
     })
-    
+
   }
 
   // Get wiki info on load
@@ -112,7 +112,7 @@ export default function Wiki({userData, setUserData}) {
   }, []);
 
   const hasUpvoted = userData.wikis_upvoted?.filter(w => w.wikiID === wikiID).length > 0
-  
+
 
   // Post new user data to save wiki to wikis_upvoted
   const handleUpvote = event => {
@@ -134,15 +134,15 @@ export default function Wiki({userData, setUserData}) {
         console.log(err)
       }
     }
-    saveUpvote().then(()=> {
+    saveUpvote().then(() => {
       console.log("Finished saving upvote!");
       console.log("New and upvtoed user data: ", userData);
     }).catch(() => {
       console.log("Failed to save upvote");
     })
-    
+
   }
-                     
+
 
   return (
     <div className='wiki'>
@@ -150,9 +150,9 @@ export default function Wiki({userData, setUserData}) {
       <div className='title'>{wikiData.wikiObject && wikiData.wikiObject.title}</div>
       <div className='desc'>{wikiData.wikiObject && wikiData.wikiObject.description}</div>
       <div className='points'>Points: {wikiData.wikiObject && wikiData.wikiObject.points}
-      <Button type='button' className='upvote' onClick={handleUpvote} disabled={hasUpvoted}>
-        {hasUpvoted ? "Upvoted" : "+1"}
-      </Button>
+        <Button type='button' className='upvote' onClick={handleUpvote} disabled={hasUpvoted}>
+          {hasUpvoted ? "Upvoted" : "+1"}
+        </Button>
       </div>
 
       <Card>
@@ -161,32 +161,32 @@ export default function Wiki({userData, setUserData}) {
           <Card.Body>
             <Card.Title>
               Project genres:
-              </Card.Title>
-              <Card.Text>
+            </Card.Title>
+            <Card.Text>
               {!isLoading && wikiData.wikiObject &&
-                
-                Object.keys(wikiData.wikiObject?.genres).map(function(key, index) {
-                  
-                    return wikiData.wikiObject.genres[key] ? key + ", " : null;
-                  })
+
+                Object.keys(wikiData.wikiObject?.genres).map(function (key, index) {
+
+                  return wikiData.wikiObject.genres[key] ? key + ", " : null;
+                })
               }
-              </Card.Text>
-            
+            </Card.Text>
+
           </Card.Body>
         }
       </Card>
 
       <Tabs
-      id="wiki-read-edit-tabs"
-      activeKey={key}
-      onSelect={(k) => {
-        setKey(k)
-        setIsSaved(false)
-      }}
-      className="mb-3"
+        id="wiki-read-edit-tabs"
+        activeKey={key}
+        onSelect={(k) => {
+          setKey(k)
+          setIsSaved(false)
+        }}
+        className="mb-3"
       >
         <Tab eventKey="read-wiki" title="Read Wiki">
-        <div dangerouslySetInnerHTML={{ __html: htmlValue }} />
+          <div dangerouslySetInnerHTML={{ __html: htmlValue }} />
 
         </Tab>
         <Tab eventKey="edit-wiki" title="Edit Wiki">
@@ -200,27 +200,20 @@ export default function Wiki({userData, setUserData}) {
         </Tab>
 
         <Tab eventKey="change-log" title="Project Feed">
-          
+
           {wikiData.wikiObject &&
             wikiData.wikiObject.activity_log.map((change) => {
-              
-              return(
-                <ProjectPost change={change} displayWikiInfo={false} displayUserInfo={true}/>
+
+              return (
+                <ProjectPost change={change} displayWikiInfo={false} displayUserInfo={true} />
 
               )
             })
           }
-          
 
-        </Tab> 
+        </Tab>
 
       </Tabs>
-
-
-
-
-
-
 
 
     </div>

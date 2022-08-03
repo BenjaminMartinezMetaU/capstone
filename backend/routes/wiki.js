@@ -3,7 +3,6 @@ const Parse = require('parse/node');
 const { WIKI_DEFAULT_HTML } = require('./constants.js')
 const diff = require('../utils/htmldiff')
 
-
 const router = express.Router();
 
 const { BadRequestError, NotFoundError } = require('../utils/errors');
@@ -21,26 +20,25 @@ router.post('/wiki/new', async (req, res, next) => {
             "html_curr": "<h1>" + req.body.title + "</h1>" + WIKI_DEFAULT_HTML,
             "html_prev": "<h1>" + req.body.title + "</h1>" + WIKI_DEFAULT_HTML,
             "activity_log": [],
-            "points" : 0,
+            "points": 0,
         }
         const wiki = new Parse.Object("Wiki", { wikiObject })
         await wiki.save();
         console.log('wiki:att ', wiki.attributes);
-       
+
 
         // USER updates: connect it to user
         // add new Wiki started to wikis_worked_on
 
         let currentUser = Parse.User.current();
-    
+
         /* User does not contain the current wiki */
-            const new_wiki_worked_on = {
-                "wikiID" : wiki.id,
-                "wikiTitle" : wiki.attributes.wikiObject.title,
-                "userRoleOnWiki" : "founder"
-                }
-            currentUser.set("wikis_worked_on", [...currentUser.attributes.wikis_worked_on, new_wiki_worked_on ])
-          
+        const new_wiki_worked_on = {
+            "wikiID": wiki.id,
+            "wikiTitle": wiki.attributes.wikiObject.title,
+            "userRoleOnWiki": "founder"
+        }
+        currentUser.set("wikis_worked_on", [...currentUser.attributes.wikis_worked_on, new_wiki_worked_on])
 
         await currentUser.save()
 
@@ -99,17 +97,17 @@ router.post('/wiki/save', async (req, res, next) => {
         const oldWikiObject = wikiInfo.attributes.wikiObject;
 
         // Diff HTML strings
-        
+
         const htmlDiff = diff(oldWikiObject.html_curr, htmlValue);
         console.log('htmlDiff: ', htmlDiff);
         // Find change
         let change = "modified project";
-        if(htmlDiff.includes("ins") && !htmlDiff.includes("del")){
+        if (htmlDiff.includes("ins") && !htmlDiff.includes("del")) {
             change = "added to project"
-        } else if (htmlDiff.includes("del") && !htmlDiff.includes("ins")){
+        } else if (htmlDiff.includes("del") && !htmlDiff.includes("ins")) {
             change = "deleted from project"
-        } 
-        
+        }
+
 
 
 
@@ -121,18 +119,18 @@ router.post('/wiki/save', async (req, res, next) => {
             "change": change,
             "key": activityKey,
             "userID": userData.userID,
-            "user_name" : userData.user_name,
-            "wikiID" : wikiID,
-            "wikiTitle" : wikiTitle,
-            "points" : 0,
-            "htmlDiff" : htmlDiff
+            "user_name": userData.user_name,
+            "wikiID": wikiID,
+            "wikiTitle": wikiTitle,
+            "points": 0,
+            "htmlDiff": htmlDiff
         }
 
         // USER updates
         // add activity to user info
         let currentUser = Parse.User.current();
-    
-    
+
+
         console.log('currentUser: ', currentUser);
         // update activity log fields
         currentUser.set("activity_log", [...currentUser.attributes.activity_log, newActivity]);
@@ -140,12 +138,12 @@ router.post('/wiki/save', async (req, res, next) => {
         if (currentUser.attributes.wikis_worked_on.filter(wiki => wiki.wikiID === wikiID).length === 0) {
             /* User does not contain the current wiki */
             const new_wiki_worked_on = {
-                "wikiID" : wikiID,
-                "wikiTitle" : wikiTitle,
-                "userRoleOnWiki" : "contributor"
-                }
-            currentUser.set("wikis_worked_on", [...currentUser.attributes.wikis_worked_on, new_wiki_worked_on ])
-          }
+                "wikiID": wikiID,
+                "wikiTitle": wikiTitle,
+                "userRoleOnWiki": "contributor"
+            }
+            currentUser.set("wikis_worked_on", [...currentUser.attributes.wikis_worked_on, new_wiki_worked_on])
+        }
 
         await currentUser.save()
 
@@ -208,11 +206,11 @@ router.get('/home', async (req, res, next) => {
         let currentUser = Parse.User.current();
         console.log('currentUser: ', currentUser);
         let wikiIDs = [];
-        currentUser.attributes.wikis_worked_on.map((wiki)=>{
+        currentUser.attributes.wikis_worked_on.map((wiki) => {
             wikiIDs.push(wiki.wikiID);
         });
         const wikiIDsUpvoted = [];
-        currentUser.attributes.wikis_upvoted.map((wiki)=>{
+        currentUser.attributes.wikis_upvoted.map((wiki) => {
             wikiIDsUpvoted.push(wiki.wikiID);
         });
         const favGenres = currentUser.attributes.favGenres;
@@ -224,7 +222,7 @@ router.get('/home', async (req, res, next) => {
             const wikiInfo = await queryWiki.first();
             console.log('wikiInfo: att', wikiInfo.attributes);
             return wikiInfo.attributes.wikiObject;
-          }));
+        }));
 
         // 3. get wikiInfo from ALL wikis where at least one genre matches user favGenres
         // prob not efficient
@@ -234,8 +232,8 @@ router.get('/home', async (req, res, next) => {
             const wikiGenres = wiki.attributes.wikiObject.genres;
             let weight = 0;
             // Loop through genres
-            Object.keys(favGenres).forEach(function(key) {
-                if(favGenres[key] && wikiGenres[key]){
+            Object.keys(favGenres).forEach(function (key) {
+                if (favGenres[key] && wikiGenres[key]) {
                     // 1 matching genre = 1 more weight
                     weight += 1;
                 }
@@ -247,18 +245,18 @@ router.get('/home', async (req, res, next) => {
             const hasUpvoted = wikiIDsUpvoted.some((wikiID) => wikiID === wiki.id);
             weight = hasUpvoted ? weight + 3 : weight;
 
-            if(weight > 0){
-                
-                return {wiki, weight};
-            } else{
+            if (weight > 0) {
+
+                return { wiki, weight };
+            } else {
                 return null;
             }
-            
-        });
-        
 
- 
-        
+        });
+
+
+
+
         //  2. for each wiki find and get the wiki info
         //  3. store it 
 
@@ -268,8 +266,8 @@ router.get('/home', async (req, res, next) => {
             const wikiInfo = await queryWiki.first();
             console.log('wikiInfo: att', wikiInfo.attributes);
             return wikiInfo.attributes.wikiObject.activity_log;
-          }));
-    
+        }));
+
         res.status(200).json({ wikiFeeds, wikisWithWeights });
         console.log("✅ Successfully retrieved wiki info!")
 

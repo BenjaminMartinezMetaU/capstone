@@ -18,21 +18,21 @@ export default function SearchResults({ searchResults }) {
                     if (result.userID) {
                         return (
                             <div className='link-user' key={result.userID}>
-                            <Card><Card.Body>
-                                <Link to={"/account/" + result.userID}>
-                                    User: {result.user_name}
-                                </Link>
-                            </Card.Body></Card>
+                                <Card><Card.Body>
+                                    <Link to={"/account/" + result.userID}>
+                                        User: {result.user_name}
+                                    </Link>
+                                </Card.Body></Card>
                             </div>
                         )
                     } else if (result.objectId) {
                         return (
                             <div className='link-wiki' key={result.objectId}>
-                            <Card><Card.Body>
-                                <Link to={"/wiki/" + result.objectId}>
-                                    Wiki: {result.wikiObject.title}
-                                </Link>
-                            </Card.Body></Card>
+                                <Card><Card.Body>
+                                    <Link to={"/wiki/" + result.objectId}>
+                                        Wiki: {result.wikiObject.title}
+                                    </Link>
+                                </Card.Body></Card>
                             </div>
                         )
                     } else {
