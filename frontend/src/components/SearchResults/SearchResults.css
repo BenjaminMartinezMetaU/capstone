@@ -1,23 +1,23 @@
 .not-found {
-    font-size: x-large;
+  font-size: x-large;
 }
 
-.search-options{
-    border-style: solid;
-    border-radius: 1px;
+.search-options {
+  border-style: solid;
+  border-radius: 1px;
 }
-.sortBy{
-    padding: 30px;
-}
-
-.filterBy{
-    padding: 30px;
+.sortBy {
+  padding: 30px;
 }
 
-.sortBy-input{
-    padding: 10px;
+.filterBy {
+  padding: 30px;
 }
 
-.filterBy-input{
-    padding: 10px;
+.sortBy-input {
+  padding: 10px;
+}
+
+.filterBy-input {
+  padding: 10px;
 }
