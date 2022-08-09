@@ -32,7 +32,7 @@ export default function AccountSetup({ data, setData }) {
           "email" : email.current.value,
           "favGenres" : favGenres
         })
-        console.log("User upd: ", res.data.currentUser)
+        console.log("User updated: ", res.data.currentUser)
         setData(res.data.currentUser);
         let userID = res.data.currentUser.userID;
         //go to profile page according to userID

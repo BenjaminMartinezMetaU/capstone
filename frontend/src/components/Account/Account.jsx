@@ -14,7 +14,7 @@ export default function Account({ data, picture }) {
   const API_BASE_URL = "http://localhost:3001/account";
 
   let accountIsCurrentUser = accountData && accountData.userID == data.userID;
-  console.log('data: ac', data);
+  console.log('data: IN THE ACCOUNT VIEW', data);
 
 
   //Get user info on load

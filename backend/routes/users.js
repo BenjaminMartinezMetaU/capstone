@@ -56,6 +56,23 @@ router.post('/sign-in', async (req, res) => {
     }
 })
 
+// Log out of Parse session, frontend resets current user data
+router.post('/logout', async (req, res) => {
+
+    try {
+        Parse.User.logOut().then(() => {
+            const currentUser = Parse.User.current();  // this will now be null
+            res.status(201).json({ currentUser });
+          });
+
+        console.log("✅ Successfully logged out of Parse session")
+    } catch (error) {
+        res.status(400)
+        res.send({ "❌ error": "Failed to log out: " + error })
+    }
+
+})
+
 
 // User inputs and saves their username, blurb
 router.post('/register', async (req, res) => {
@@ -150,7 +167,7 @@ router.get('/account/:userID', async (req, res, next) => {
 });
 
 // Get array of users info by user_name (we just need user_name and userID)
-router.post('/search', async (req, res, next) => {
+router.post('/account/search', async (req, res, next) => {
 
     try {
         const { searchQuery } = req.body;
