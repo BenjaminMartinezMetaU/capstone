@@ -12,13 +12,14 @@ import { Tabs } from 'react-bootstrap'
 
 import ProjectPost from '../Home/ProjectPost';
 
+const API_BASE_URL = "http://localhost:3001/wiki";
+
 export default function Wiki({ userData, setUserData }) {
   console.log('userData: ', userData);
   // We get user data to see if they have upvoted this before
   // We set user data to change that they have upvoted this
 
   const { wikiID } = useParams();
-  const API_BASE_URL = "http://localhost:3001/wiki";
 
   const [htmlValue, setHtmlValue] = useState('');
   // wiki data has all info. objectId, updatedAt, 

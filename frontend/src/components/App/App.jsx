@@ -29,13 +29,35 @@ export default function App() {
   // and on profile page to check if user profile is the current user
   // ex. blurb, created at, img_url, objectId, userID, user_name, username
   const [data, setData] = useState({});
+  console.log('data: IN THE APP JSX VIEW ', data);
 
   // Picture link (not rly used)
   const [picture, setPicture] = useState('');
 
   // Array of either User or Wiki objects set by Searchbar in Navbar
-  const [searchResults, setSearchResults] = useState([]);
+  const [searchResults, setSearchResults] = useState({
+    "results" : [],
+    "wikiResultsByRecency" : [],
+    "wikiResultsByUpvote" : [],
+    "userResultsByRecency" : [],
+    "userResultsByUpvote" : []
+  });
 
+useEffect(() => {
+  if(sessionStorage["login"]){
+  setLogin(JSON.parse(window.sessionStorage.getItem("login")));
+  }
+  if(sessionStorage["data"]){
+    console.log('sessionStorage["data"]: ', sessionStorage["data"]);
+  setData(JSON.parse(window.sessionStorage.getItem("data")));
+  }
+
+}, []);
+
+useEffect(() => {
+  window.sessionStorage.setItem("login", login);
+  window.sessionStorage.setItem("data", JSON.stringify(data));
+}, [login, data]);
 
   return (
 
@@ -48,8 +70,11 @@ export default function App() {
 
               <Navbar
                 data={data}
+                setData={setData}
                 setSearchResults={setSearchResults}
+                searchResults={searchResults}
                 login={login}
+                setLogin={setLogin}
               />
               <Routes>
                 <Route path="/" element={

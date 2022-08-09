@@ -182,10 +182,14 @@ router.post('/wiki/search', async (req, res, next) => {
         queryWikis.contains("wikiObject.title", searchQuery);
 
 
-        const resWikisInfo = await queryWikis.find();
-        console.log('resWikisInfo: ', resWikisInfo);
+        const resWikisInfoRecency = await queryWikis.find();
+        console.log('resWikisInforec: ', resWikisInfoRecency);
 
-        res.status(201).json({ resWikisInfo });
+        const resWikisInfoUpvote = [...resWikisInfoRecency].sort((a, b) => b.attributes.wikiObject.points - a.attributes.wikiObject.points);
+        
+        console.log('sorted: ', resWikisInfoUpvote)
+
+        res.status(201).json({ resWikisInfoRecency, resWikisInfoUpvote });
         console.log("✅ Successfully retrieved wikis info!")
 
 
