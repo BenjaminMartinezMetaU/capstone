@@ -8,13 +8,13 @@ class ExpressError extends Error {
 
 class BadRequestError extends ExpressError {
   constructor(message) {
-    super(message || 'Bad Request', 400);
+    super(message || "Bad Request", 400);
   }
 }
 
 class NotFoundError extends ExpressError {
   constructor(message) {
-    super(message || 'Not Found', 404);
+    super(message || "Not Found", 404);
   }
 }
 
