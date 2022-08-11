@@ -6,7 +6,7 @@ export default function Logo() {
   return (
     <div className="logo" width="112" height="28">
       <Link to="/">
-        <img alt="logo" src="../../images/store.svg" />
+        <img alt="logo" src="../../wikiLogo.png" />
       </Link>
     </div>
   );
