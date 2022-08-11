@@ -4,6 +4,8 @@ import { Link, useNavigate } from "react-router-dom";
 import { useState } from "react";
 import axios from "axios";
 import SearchResults from "../SearchResults/SearchResults";
+import { Button } from "react-bootstrap";
+import {AiOutlineSearch} from "react-icons/ai";
 
 export default function Searchbar({ data, setSearchResults, searchResults }) {
   const [isLoading, setIsLoading] = useState(false);
@@ -59,17 +61,23 @@ export default function Searchbar({ data, setSearchResults, searchResults }) {
 
   return (
     <div className="searchbar">
-      <form onSubmit={handleSubmit}>
-        <div className="search-label">Search</div>
+      <form onSubmit={handleSubmit} className="relative">
         <label>
+
           <input
+            className="block p-2 pl-10 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
             ref={query}
-            placeholder={"Find users or projects here"}
+            placeholder={"Find users or projects"}
             style={{ width: "300px" }}
           ></input>
         </label>
 
-        <button type="submit">{isLoading ? "Loading..." : "Search"}</button>
+        <Button 
+        className="text-white right-4 bottom-0.5 bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-3 py-2 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+        type="submit"
+        > 
+        {isLoading ? "Loading..." : <AiOutlineSearch/>}
+        </Button>
       </form>
     </div>
   );

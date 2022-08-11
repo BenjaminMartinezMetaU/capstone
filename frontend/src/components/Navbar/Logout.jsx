@@ -4,6 +4,8 @@ import { Link } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 import { Button } from "react-bootstrap";
 
+import {IoLogOut} from "react-icons/io5"
+
 import axios from "axios";
 const API_BASE_URL = "http://localhost:3001";
 
@@ -31,7 +33,7 @@ export default function Logout({ data, setData, login, setLogin }) {
   };
   return (
     <div className="logout">
-      <Button onClick={handleLogout}>Logout</Button>
+      <Button variant="outline-danger" onClick={handleLogout}><IoLogOut/></Button>
     </div>
   );
 }
