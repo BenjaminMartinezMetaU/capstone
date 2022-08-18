@@ -76,7 +76,7 @@ router.get("/wiki/:wikiID", async (req, res, next) => {
 router.post("/wiki/save", async (req, res, next) => {
   try {
     // get params to update
-    const { wikiID, htmlValue, userData, wikiTitle } = req.body;
+    const { wikiID, htmlValue, userData, wikiTitle, postDesc } = req.body;
 
     // find wiki object in database
     const queryWiki = new Parse.Query("Wiki");
@@ -103,6 +103,13 @@ router.post("/wiki/save", async (req, res, next) => {
     // Change log stores on the wiki: the change and who did it
     // We store redundant information so we can have same object for user and wiki storage
     // (not necessary just easier to read and track)
+    const today = new Date();
+    const dd = String(today.getDate()).padStart(2, '0');
+    const mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
+    const yyyy = today.getFullYear();
+    const date = mm + '/' + dd + '/' + yyyy;
+    const time = today.toLocaleTimeString();
+
     const activityKey = oldWikiObject.activity_log.length;
     const newActivity = {
       change: change,
@@ -113,6 +120,9 @@ router.post("/wiki/save", async (req, res, next) => {
       wikiTitle: wikiTitle,
       points: 0,
       htmlDiff: htmlDiff,
+      date: date,
+      time: time,
+      postDesc: postDesc,
     };
 
     // USER updates
@@ -258,7 +268,8 @@ router.get("/home", async (req, res, next) => {
         queryWiki.equalTo("objectId", wikiID);
         const wikiInfo = await queryWiki.first();
         console.log("wikiInfo: att", wikiInfo.attributes);
-        return wikiInfo.attributes.wikiObject.activity_log;
+        const wikiActivityLogReversed = [...wikiInfo.attributes.wikiObject.activity_log].reverse()
+        return wikiActivityLogReversed;
       })
     );
 

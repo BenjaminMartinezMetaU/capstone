@@ -22,9 +22,14 @@ export default function Wiki({ userData, setUserData }) {
   const { wikiID } = useParams();
 
   const [htmlValue, setHtmlValue] = useState("");
+  console.log("htmlValue: ", htmlValue);
   // wiki data has all info. objectId, updatedAt,
   //   wikiObject: activity_log, title, desc, html
   const [wikiData, setWikiData] = useState({});
+  const [reverseActivityLog, setReverseActivityLog] = useState([]);
+
+  const postDescription = React.createRef();
+
   const [isLoading, setIsLoading] = useState(false);
 
   // for switching tabs
@@ -34,7 +39,6 @@ export default function Wiki({ userData, setUserData }) {
   // Also this only works for first time when current tab
   // bc goes back to false on tab switch or if failed
   // but tells user nothing if failed
-  // TODO: prob better way to do this
   const [isSaved, setIsSaved] = useState(false);
 
   // Save button for editing, post new html and generate project post
@@ -45,14 +49,21 @@ export default function Wiki({ userData, setUserData }) {
     const saveWiki = async () => {
       const wikiTitle = wikiData.wikiObject.title;
       try {
+        const postDesc = postDescription.current.value;
         const res = await axios.post(`${API_BASE_URL}/save/`, {
           wikiID,
           htmlValue,
           userData,
           wikiTitle,
+          postDesc,
         });
         // Sync frontend to backend (mostly for changelog changes)
         setWikiData(res.data.wikiInfo);
+
+        setReverseActivityLog(
+          [...res.data.wikiInfo?.wikiObject?.activity_log].reverse()
+        );
+
         console.log("new wiki info: ", res.data);
       } catch (err) {
         setIsSaved(false);
@@ -77,6 +88,10 @@ export default function Wiki({ userData, setUserData }) {
         .then(({ data }) => {
           console.log("data: ", data);
           setWikiData(data.wikiInfo);
+          setReverseActivityLog(
+            [...data.wikiInfo?.wikiObject?.activity_log].reverse()
+          );
+
           setHtmlValue(data.wikiInfo.wikiObject.html_curr);
         })
         .catch((error) => {
@@ -139,76 +154,118 @@ export default function Wiki({ userData, setUserData }) {
 
   return (
     <div className="wiki">
-      <div className="title">
+      <div className="title p-1 text-center">
         {wikiData.wikiObject && wikiData.wikiObject.title}
       </div>
-      <div className="desc">
-        {wikiData.wikiObject && wikiData.wikiObject.description}
-      </div>
-      <div className="points">
-        Points: {wikiData.wikiObject && wikiData.wikiObject.points}
-        <Button
-          type="button"
-          className="upvote"
-          onClick={handleUpvote}
-          disabled={hasUpvoted}
-        >
-          {hasUpvoted ? "Upvoted" : "+1"}
-        </Button>
-      </div>
-
-      <Card>
-        {!isLoading && (
-          <Card.Body>
-            <Card.Title>Project genres:</Card.Title>
+      <div className="flex flex-row">
+        <div className="flex flex-col w-40 mx-2">
+          <Card className="desc p-1 text-lg">
+            <Card.Title>Description: </Card.Title>
             <Card.Text>
-              {!isLoading &&
-                wikiData.wikiObject &&
-                Object.keys(wikiData.wikiObject?.genres).map(function (
-                  key,
-                  index
-                ) {
-                  return wikiData.wikiObject.genres[key] ? key + ", " : null;
-                })}
+              {wikiData.wikiObject && wikiData.wikiObject.description}
             </Card.Text>
-          </Card.Body>
-        )}
-      </Card>
+          </Card>
+          <div>
+            <Card className="points p-1">
+              <Card.Title>
+                Total Upvotes:{" "}
+                {wikiData.wikiObject && wikiData.wikiObject.points}
+              </Card.Title>
+              <Button
+                variant="outline-primary"
+                type="button"
+                className="upvote m-3"
+                onClick={handleUpvote}
+                disabled={hasUpvoted}
+              >
+                {hasUpvoted ? "Upvoted" : "+1"}
+              </Button>
+            </Card>
+          </div>
 
-      <Tabs
-        id="wiki-read-edit-tabs"
-        activeKey={key}
-        onSelect={(k) => {
-          setKey(k);
-          setIsSaved(false);
-        }}
-        className="mb-3"
-      >
-        <Tab eventKey="read-wiki" title="Read Wiki">
-          <div dangerouslySetInnerHTML={{ __html: htmlValue }} />
-        </Tab>
-        <Tab eventKey="edit-wiki" title="Edit Wiki">
-          <ReactQuill theme="snow" value={htmlValue} onChange={setHtmlValue} />
+          <Card>
+            {!isLoading && (
+              <Card.Body>
+                <Card.Title>Project genres:</Card.Title>
+                <Card.Text>
+                  {!isLoading &&
+                    wikiData.wikiObject &&
+                    Object.keys(wikiData.wikiObject?.genres).map(function (
+                      key,
+                      index
+                    ) {
+                      return wikiData.wikiObject.genres[key]
+                        ? key + ", "
+                        : null;
+                    })}
+                </Card.Text>
+              </Card.Body>
+            )}
+          </Card>
+        </div>
+        <div className="w-full border-1 border-gray-400">
+          <Tabs
+            id="wiki-read-edit-tabs"
+            activeKey={key}
+            onSelect={(k) => {
+              setKey(k);
+              setIsSaved(false);
+            }}
+            className="mb-3"
+          >
+            <Tab
+              eventKey="read-wiki"
+              title="Read Wiki"
+              className="prose prose-stone m-3"
+            >
+              <div dangerouslySetInnerHTML={{ __html: htmlValue }} />
+            </Tab>
+            <Tab eventKey="edit-wiki" title="Edit Wiki">
+              <ReactQuill
+                theme="snow"
+                value={htmlValue}
+                onChange={setHtmlValue}
+              />
 
-          <Button onClick={handleSaveWiki}>
-            {isLoading ? "Saving…" : "Click to save changes"}
-          </Button>
-          {isSaved && "Saved!"}
-        </Tab>
+              <label className="p-3">
+                <div className="font-bold text-base pb-2">Share changes: </div>
+                <textarea
+                  ref={postDescription}
+                  rows="3"
+                  cols="50"
+                  placeholder="(Optional) Share a description of your changes!"
+                  className="ml-2 -mb-7 p-2 pl-10 w-90 text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                ></textarea>
+              </label>
+              <Button
+                className="m-3"
+                variant="outline-primary"
+                onClick={handleSaveWiki}
+              >
+                {isLoading ? "Saving…" : "Click to save changes"}
+              </Button>
+              {isSaved && "Saved!"}
+            </Tab>
 
-        <Tab eventKey="change-log" title="Project Feed">
-          {wikiData.wikiObject &&
-            wikiData.wikiObject.activity_log.map((change) => {
-              return (
-                <ProjectPost
-                  change={change}
-                  displayWikiInfo={false}
-                  displayUserInfo={true}
-                />
-              );
-            })}
-        </Tab>
-      </Tabs>
+            <Tab eventKey="change-log" title="Project Feed">
+              {wikiData.wikiObject &&
+                reverseActivityLog == 0 &&
+                `This project has not been updated yet.`}
+              {wikiData.wikiObject &&
+                reverseActivityLog.length > 0 &&
+                reverseActivityLog.map((change) => {
+                  return (
+                    <ProjectPost
+                      change={change}
+                      displayWikiInfo={false}
+                      displayUserInfo={true}
+                    />
+                  );
+                })}
+            </Tab>
+          </Tabs>
+        </div>
+      </div>
     </div>
   );
 }

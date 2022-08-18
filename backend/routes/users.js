@@ -8,6 +8,7 @@ const { BadRequestError, NotFoundError } = require("../utils/errors");
 // columns that you want in your user table (profile_picture_url, etc)
 router.post("/sign-in", async (req, res) => {
   const user = new Parse.User(req.body);
+  
   // Check if user already exists
   // TODO: make User model class to store common methods like this
 
@@ -15,6 +16,7 @@ router.post("/sign-in", async (req, res) => {
   queryUsersById.equalTo("userID", req.body.userID);
   const usersWithSameId = await queryUsersById.find();
   const userExists = usersWithSameId.length > 0;
+  console.log('userExists: ', userExists);
 
   // login to Parse session
   if (userExists) {
@@ -37,17 +39,44 @@ router.post("/sign-in", async (req, res) => {
     // register on Parse db
 
     try {
-      await user.signUp();
+      const user = await Parse.User.signUp(
+        req.body.username, 
+        req.body.password,
+        );
 
       const sessionToken = user.getSessionToken();
       console.log("sessionToken: ", sessionToken);
       Parse.User.enableUnsafeCurrentUser();
       Parse.User.become(sessionToken);
+      
+      user.set("userID", req.body.userID);
+      user.set("img_url", req.body.img_url);
+      user.set("data", req.body.data);
+      user.set("user_name", req.body.user_name);
+      user.set("blurb", req.body.blurb);
+  
+      user.set("email_custom", req.body.email_custom);
+     
+      user.set("activity_log", req.body.activity_log);
+      user.set("wikis_worked_on", req.body.wikis_worked_on);
+      user.set("favGenres", req.body.favGenres);
+      user.set("wikis_upvoted", req.body.wikis_upvoted);
+      user.set("points", req.body.points);
+  
+      await user.save(null, {useMasterKey: true});
+      
+      console.log("worked til here");
+
+
+
 
       res.status(201);
       res.send({ user: user });
       console.log("✅ Successfully registered!");
     } catch (error) {
+      throw(error);
+      console.log('error: ', error);
+
       res.status(400);
       res.send({ "❌ error": "Failed to create user: " + error });
     }
@@ -71,17 +100,18 @@ router.post("/logout", async (req, res) => {
 
 // User inputs and saves their username, blurb
 router.post("/register", async (req, res) => {
-  const { user_name, blurb, email, favGenres } = req.body;
+  const { user_name, blurb, email_custom, favGenres, displayRealName } = req.body;
 
   try {
     let currentUser = Parse.User.current();
 
-    console.log("currentUser: ", currentUser);
+    console.log("currentUser: ", currentUser.attributes);
     // update fields
     currentUser.set("user_name", user_name);
     currentUser.set("blurb", blurb);
-    currentUser.set("email", email);
+    currentUser.set("email_custom", email_custom);
     currentUser.set("favGenres", favGenres);
+    currentUser.set("displayRealName", displayRealName);
 
     await currentUser.save();
     res.status(201).json({ currentUser });

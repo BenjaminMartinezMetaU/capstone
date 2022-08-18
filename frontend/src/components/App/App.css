@@ -12,7 +12,7 @@
   height: 100%;
   min-height: 100vh;
 
-  background-color: #fffddd;
+  background-color: #ebebeb;
 }
 html,
 body,
@@ -36,3 +36,4 @@ body,
   flex: 1;
   overflow: auto;
 }
+

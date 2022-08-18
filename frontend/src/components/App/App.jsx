@@ -19,6 +19,7 @@ import AccountSetup from "../Account/AccountSetup";
 import WikiSetup from "../Wiki/WikiSetup";
 import SearchResults from "../SearchResults/SearchResults";
 import Home from "../Home/Home";
+import NotFound from "./NotFound";
 
 export default function App() {
   const API_BASE_URL = "http://localhost:3001";
@@ -112,6 +113,7 @@ export default function App() {
                 />
 
                 <Route path="/home/" element={<Home data={data} />} />
+                <Route path="*" element={<NotFound />} />
               </Routes>
             </div>
           </div>

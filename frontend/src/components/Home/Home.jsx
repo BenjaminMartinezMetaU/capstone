@@ -19,7 +19,10 @@ export default function Home({ data }) {
 
       await axios(API_BASE_URL + "/home")
         .then(({ data }) => {
-          const wikisRankedSorted = data.wikisWithWeights;
+          const wikisRanked = data.wikisWithWeights;
+          const wikisRankedSorted = wikisRanked.filter(function (el) {
+            return el != null;
+          });
           wikisRankedSorted.sort((a, b) => b.weight - a.weight);
           setWikisRanked(wikisRankedSorted);
         })
@@ -33,21 +36,33 @@ export default function Home({ data }) {
   }, []);
 
   return (
-    <div className="home">
-      {!isLoading &&
+    <div>
+    {!isLoading && wikisRanked.length == 0 &&
+    <div className="text-xl p-5 text-center">
+    To see relevant project posts, add more genre preferences, upvote projects, or start creating and working on projects!
+    </div>
+    }
+    {!isLoading && wikisRanked.length > 0 &&
+      <div className="text-lg text-center p-3">See relevant project posts you may be interested in:</div>
+    }
+    <div className="home flex flex-col items-center justify-center basis-full">
+      {!isLoading && wikisRanked.length > 0 &&
         wikisRanked.map((wikiRanked) => {
           let activityLog = wikiRanked.wiki.wikiObject.activity_log;
 
           return activityLog.reverse().map((change) => {
             return (
+              <div className="w-9/12 max-w-2xl">
               <ProjectPost
                 change={change}
                 displayWikiInfo={true}
                 displayUserInfo={true}
               />
+              </div>
             );
           });
         })}
+    </div>
     </div>
   );
 }

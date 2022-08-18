@@ -1,7 +1,8 @@
 import * as React from "react";
 import "./Login.css";
+import Logo from "../Navbar/Logo";
 import FacebookLogin from "react-facebook-login";
-import { Card, Image, Nav } from "react-bootstrap";
+import { Card } from "react-bootstrap";
 import axios from "axios";
 
 import { useNavigate } from "react-router-dom";
@@ -41,7 +42,7 @@ export default function Login({
           data: response,
           user_name: null,
           blurb: null,
-          email: null,
+          email_custom: null,
           activity_log: [],
           wikis_worked_on: [],
           favGenres: {},
@@ -71,24 +72,40 @@ export default function Login({
   };
 
   return (
-    <div className="login">
-      {login && "You're already logged in."}
+    <div>
+      <div className="mx-5 mt-3 flex flex-row">
+        <Logo />
 
-      <Card style={{ width: "600px" }} className="text-center">
-        {!login && <Card.Title>Log in through Facebook here:</Card.Title>}
-        <Card.Header>
-          {!login && (
-            <FacebookLogin
-              appId="766038284415266"
-              autoLoad={false}
-              fields="name,email,picture"
-              scope="public_profile,user_friends"
-              callback={responseFacebook}
-              icon="fa-facebook"
-            />
-          )}
-        </Card.Header>
-      </Card>
+        <span className="mx-3 mt-2 text-3xl font-mono">Project Collab</span>
+      </div>
+
+      <div className="login">
+        <div className="text-center p-5 text-xl">
+          {login && "You're already logged in."}
+        </div>
+
+        {!login && (
+          <Card style={{ width: "600px" }} className="text-center">
+            {!login && (
+              <Card.Title className="m-1">
+                Log in through Facebook here:
+              </Card.Title>
+            )}
+            <Card.Header>
+              {!login && (
+                <FacebookLogin
+                  appId="766038284415266"
+                  autoLoad={false}
+                  fields="name,email,picture"
+                  scope="public_profile,user_friends"
+                  callback={responseFacebook}
+                  icon="fa-facebook"
+                />
+              )}
+            </Card.Header>
+          </Card>
+        )}
+      </div>
     </div>
   );
 }

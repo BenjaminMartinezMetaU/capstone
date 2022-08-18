@@ -7,10 +7,11 @@ const userRouter = require("./routes/users");
 const wikiRouter = require("./routes/wiki");
 
 const app = express();
-
+// App ID, JS key, Master key
 Parse.initialize(
   "gE7GwC0Ga8GbURK9NEdDI3Xmx3EMNCpapr6keW8f",
-  "SRU9rih4vB2rjxPFS9MHDPI7dZtVPbEXfSr0DDQm"
+  "SRU9rih4vB2rjxPFS9MHDPI7dZtVPbEXfSr0DDQm",
+  "TnPIROtxPkpVx3SJhT91Ft07DDJIJBrBrgHKIvRE"
 );
 
 Parse.serverURL = "https://parseapi.back4app.com";

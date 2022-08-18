@@ -1,9 +1,11 @@
 .navbar {
-  background-color: #ffdfbf;
+  background-color: #bfe6ff;
   display: flex;
-  justify-content: start;
+  justify-content: space-evenly !important;
   padding: 1px;
   font-size: larger;
+  border-bottom: 2px solid whitesmoke;
+
 }
 
 .logo {
@@ -15,4 +17,9 @@
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
+}
+
+.link {
+    display: inline-block;
+    width: 40px;
 }
